@@ -1,3 +1,8 @@
+/*
+ * Connect with left most and right most
+ * do dijkstra
+ * need to check special case where u can go to the end
+ */
 import java.io.*;
 import java.util.*;
 public class Telephone {
@@ -49,11 +54,11 @@ public class Telephone {
 	    		out.println(i+" "+cur);
 	    	}
 	    }*/
-	    int dijk[]=new int[n];
-	    Arrays.fill(dijk, Integer.MAX_VALUE);
-	    PriorityQueue<Integer>q=new PriorityQueue<>((Integer p1, Integer p2)->Integer.compare(dijk[p1], dijk[p2]));
+	    long dijk[]=new long[n];
+	    Arrays.fill(dijk, Long.MAX_VALUE);
+	    PriorityQueue<Integer>q=new PriorityQueue<>((Integer p1, Integer p2)->Long.compare(dijk[p1], dijk[p2]));
 	    q.add(0);
-	    int ans=Integer.MAX_VALUE;
+	    Long ans=Long.MAX_VALUE;
 	    dijk[0]=0;
 	    while(!q.isEmpty()) {
 	    	int cur=q.poll();
@@ -68,7 +73,7 @@ public class Telephone {
 	    		}
 	    	}
 	    }
-	    out.println(Math.min(dijk[n-1], ans));
+	    out.println(Math.min(ans, dijk[n-1])==Long.MAX_VALUE?-1:Math.min(ans,  dijk[n-1]));
 	    out.close();
 	}
 }
