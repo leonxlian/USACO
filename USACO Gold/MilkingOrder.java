@@ -19,6 +19,8 @@ public class MilkingOrder {
 	    for(int i=0;i<n;i++) {
 	    	al.add(new ArrayList<Integer>());
 	    }
+	    //add each layer
+	    //edges[i] contains all connections on observation i
 	    for(int i=0;i<m;i++) {
 	    	st=new StringTokenizer(br.readLine());
 	    	int l=Integer.parseInt(st.nextToken());
@@ -32,6 +34,7 @@ public class MilkingOrder {
 	    		last=cur;
 	    	}
 	    }
+	    //binary search on answer
 	    int low=0;
 	    int high=m+1;
 	    int ret=0;
@@ -58,9 +61,11 @@ public class MilkingOrder {
 	}
 	static boolean check(int mid) {
 		int in_deg[]=new int[n];
+		//clear adj list
 		for(int i=0;i<n;i++) {
 			al.get(i).clear();
 		}
+		//connect connections up to this observation
 		for(int i=0;i<mid;i++) {
 			for(Pair p:edges.get(i)) {
 				al.get(p.x).add(p.y);
@@ -72,6 +77,7 @@ public class MilkingOrder {
 				out.println(i+" "+next);
 			}
 		}*/
+		//kahns
 		PriorityQueue<Integer>q=new PriorityQueue<>();
 		for(int i=0;i<n;i++){
 			if(in_deg[i]==0) {
@@ -89,6 +95,7 @@ public class MilkingOrder {
 				}
 			}
 		}
+		//ake sure it's possible
 		return ans.size()==n;
 	}
 	static class Pair{

@@ -27,6 +27,7 @@ public class CowAtLarge {
 	    int dist[]=new int[n];
 	    Arrays.fill(dist, -1);
 	    dist[start]=0;
+	    //bessie bfs from start
 	    while(!q.isEmpty()) {
 	    	int cur=q.poll();
 	    	for(int next:al.get(cur)) {
@@ -37,6 +38,7 @@ public class CowAtLarge {
 	    	}
 	    }
 	    int dist2[]=new int[n];
+	    //farmer bfs, all leaf nodes
 	    Arrays.fill(dist2, -1);
 	    for(int i=0;i<n;i++) {
 	    	if(al.get(i).size()==1) {
@@ -57,6 +59,7 @@ public class CowAtLarge {
 	    boolean vis[]=new boolean[n];
 	    vis[start]=true;
 	    int count=0;
+	    //if bessie reaches this place before we block all paths from this subtree
 	    while(!q.isEmpty()) {
 	    	int cur=q.poll();
 	    	if(dist2[cur]<=dist[cur]) {

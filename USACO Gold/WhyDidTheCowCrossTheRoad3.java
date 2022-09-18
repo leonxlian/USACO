@@ -1,35 +1,58 @@
 import java.io.*;
 import java.util.*;
-public class Haircut {
+public class WhyDidTheCowCrossTheRoad3 {
 	public static PrintWriter out;
 	public static void main(String[] args)throws IOException {
-	    BufferedReader br = new BufferedReader(new FileReader("haircut.in"));
-	    PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("haircut.out")));
+	    BufferedReader br = new BufferedReader(new FileReader("circlecross.in"));
+	    PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("circlecross.out")));
 	    //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    out = new PrintWriter(System.out);
 	    StringTokenizer st = new StringTokenizer(br.readLine());
 	    int n=Integer.parseInt(st.nextToken());
-	    int a[]=new int[n];
-	    st=new StringTokenizer(br.readLine());
+	    int a[][]=new int[n][2];
 	    for(int i=0;i<n;i++) {
-	    	a[i]=Integer.parseInt(st.nextToken());
+	    	a[i][0]=a[i][1]=-1;
 	    }
-	    FenwickTree ft=new FenwickTree(n+1);
-	    long inversion[]=new long[n+1];
+	    for(int i=0;i<2*n;i++) {
+	    	st=new StringTokenizer(br.readLine());
+	    	int x=Integer.parseInt(st.nextToken())-1;
+	    	if(a[x][0]==-1) {
+	    		a[x][0]=i;
+	    	}else {
+	    		a[x][1]=i;
+	    	}
+	    }
+	    ArrayList<Pair>al=new ArrayList<>();
 	    for(int i=0;i<n;i++) {
-	    	inversion[a[i]]+=ft.prefixRange(a[i]+1, n+1);
-	    	ft.update(a[i], 1);
+	    	al.add(new Pair(a[i][0], a[i][1]));
 	    }
-	    out.println(0);
-	    pw.println(0);
-	    long sum=0;
-	    for(int i=0;i<n-1;i++) {
-	    	sum+=inversion[i];
-	    	//out.println(sum);
-	    	pw.println(sum);
+	    Collections.sort(al);
+	    for(int i=0;i<n;i++) {
+	    	out.println(al.get(i).x+" "+al.get(i).y);
 	    }
+	    FenwickTree ft=new FenwickTree(n<<1);
+	    long ans=0;
+	    //check overlapping intervals
+	    for(int i=0;i<n;i++) {
+	    	ans+=ft.prefixRange(al.get(i).x, al.get(i).y+1);
+	    	ft.update(al.get(i).y, 1);
+	    }
+	    out.println(ans);
+	    pw.println(ans);
 	    pw.close();
 	    //out.close();
+	}
+	static class Pair implements Comparable<Pair>{
+		int x; int y;
+		public Pair(int x, int y) {
+			this.x=x;this.y=y;
+		}
+		public int compareTo(Pair o) {
+			if(x==o.x) {
+				return Integer.compare(this.y, o.y);
+			}
+			return Integer.compare(this.x, o.x);
+		}
 	}
 	static class FenwickTree{
 		int arr[];

@@ -1,35 +1,47 @@
 import java.io.*;
 import java.util.*;
-public class Haircut {
+public class BalancedPhoto {
 	public static PrintWriter out;
 	public static void main(String[] args)throws IOException {
-	    BufferedReader br = new BufferedReader(new FileReader("haircut.in"));
-	    PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("haircut.out")));
+	    BufferedReader br = new BufferedReader(new FileReader("bphoto.in"));
+	    PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("bphoto.out")));
 	    //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	    out = new PrintWriter(System.out);
 	    StringTokenizer st = new StringTokenizer(br.readLine());
 	    int n=Integer.parseInt(st.nextToken());
-	    int a[]=new int[n];
-	    st=new StringTokenizer(br.readLine());
+	    Pair a[]=new Pair[n];
 	    for(int i=0;i<n;i++) {
-	    	a[i]=Integer.parseInt(st.nextToken());
+	    	st=new StringTokenizer(br.readLine());
+	    	a[i]=(new Pair(Integer.parseInt(st.nextToken()), i));
 	    }
-	    FenwickTree ft=new FenwickTree(n+1);
-	    long inversion[]=new long[n+1];
+	    Arrays.sort(a);
 	    for(int i=0;i<n;i++) {
-	    	inversion[a[i]]+=ft.prefixRange(a[i]+1, n+1);
-	    	ft.update(a[i], 1);
+	    	out.println(a[i].val+" "+a[i].i);
 	    }
-	    out.println(0);
-	    pw.println(0);
-	    long sum=0;
-	    for(int i=0;i<n-1;i++) {
-	    	sum+=inversion[i];
-	    	//out.println(sum);
-	    	pw.println(sum);
+	    FenwickTree ft=new FenwickTree(n);
+	    int ans=0;
+	    //go backwards, increment left and right side
+	    for(int i=n-1;i>=0;i--) {
+	    	long cnt1=ft.prefixRange(0, a[i].i+1);
+	    	long cnt2=ft.prefixRange(a[i].i, n);
+	    	ft.update(a[i].i, 1);
+	    	if(cnt1*2<cnt2||cnt2*2<cnt1) {
+	    		ans++;
+	    	}
 	    }
+	    out.println(ans);
+	    pw.println(ans);
 	    pw.close();
 	    //out.close();
+	}
+	static class Pair implements Comparable<Pair>{
+		int val; int i;
+		public Pair(int val, int i) {
+			this.val=val;this.i=i;
+		}
+		public int compareTo(Pair o) {
+			return Integer.compare(this.val, o.val);
+		}
 	}
 	static class FenwickTree{
 		int arr[];
@@ -66,7 +78,7 @@ public class Haircut {
 			}
 			return res;
 		}
-		//0 to n-1
+		//0 to n-1/  (n)   (y+1-x)
 		public long prefixRange(int index1, int index2) {
 			index1--;
 			index2--;
